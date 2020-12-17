@@ -2,7 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\User;
+use App\Models\User;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
@@ -18,11 +18,13 @@ use Illuminate\Support\Str;
 */
 
 $factory->define(User::class, function (Faker $faker) {
-    $userName = 'test';
+    $user_name = 'test';
+    $first_name = 'Ahmed';
+    $last_name = 'Olanrewaju';
     return [
-        'username' => $userName,
-        'firstname' => $faker->firstName,
-        'lastname' => $faker->lastName,
+        'username' => $user_name,
+        'firstname' => $first_name,
+        'lastname' => $last_name,
         'phone' => $faker->regexify('^[2-9]{3}-\d{10}$'),
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),

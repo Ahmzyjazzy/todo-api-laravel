@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Request;  
+use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
-use App\Model\Todo;
+use App\Http\Controllers\Controller;
+use App\Models\Todo;
 use App\Http\Resources\Todo as TodoResource;
 
 class TodoController extends Controller
@@ -32,11 +36,12 @@ class TodoController extends Controller
         Todo::findOrFail($request->todo_id) : new Todo; 
 
         $todo->id               =   $request->input('todo_id');
-        $todo->created_by_id    =   $request->user()->id; //get user id from request  
+        $todo->user_id          =   $request->user()->id; //get user id from request  
         $todo->title            =   $request->input('title');
         $todo->description      =   $request->input('description');
         $todo->is_completed     =   0;   
         $todo->expired_at       =   $request->input('expired_at');
+        $todo->slug             =   Str::slug($request->input('title'), '_');
 
         if($todo->save()){
             return new TodoResource($todo);
@@ -64,7 +69,7 @@ class TodoController extends Controller
     public function destroy($id)
     {
         $todo = Todo::findOrFail($id);
-        
+
         if($todo->delete()){
             return new TodoResource($todo);
         }
