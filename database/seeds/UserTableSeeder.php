@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder; 
+use Illuminate\Support\Str;
 use App\Models\Todo;
 use App\Models\User;
 
@@ -14,10 +15,14 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         factory(User::class)->create()->each(function ($user) {
-            //create profile
+            //create todo            
+            $title  =   "Get a new role before Dec 2021";
+            $slug   =   Str::slug($title, '_');
+
             $user->todo()->save(factory(Todo::class)->make([
-                "title" => "Get a new role before Dec 2021",
-                "description" => "Apply for role to develop my existing skills and improved more on it"
+                "title" => $title,
+                "description" => "Apply for role to develop my existing skills and improved more on it",
+                "slug" => $slug
             ]));
         });
     }

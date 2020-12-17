@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-
 use App\Http\Controllers\Controller;
 use App\Models\Todo;
 use App\Http\Resources\Todo as TodoResource;
