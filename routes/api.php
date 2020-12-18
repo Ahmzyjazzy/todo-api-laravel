@@ -29,9 +29,14 @@ Route::group(['middleware' => ['cors', 'json.response', 'auth:api']], function (
     Route::post('/logout', 'UserController@logout')->name('logout.api');
     Route::post('/user', 'UserController@logout')->name('logout.api');
 
-    Route::post('todo', 'TodoController@store');
-    Route::put('todo', 'TodoController@store');
-    Route::delete('todo/{id}', 'TodoController@destroy');
-    Route::get('todo/{id}', 'TodoController@show'); 
+    Route::post('todos', 'TodoController@store');
+    Route::put('todos', 'TodoController@update');
+    Route::delete('todos/{id}', 'TodoController@destroy');
+    Route::get('todos/{id}', 'TodoController@show'); 
     Route::get('todos', 'TodoController@index');
+});
+
+Route::fallback(function(){
+    return response()->json([
+        'message' => 'Page Not Found. If error persists, contact olanrewajuahmed095@yahoo.com'], 404);
 });
