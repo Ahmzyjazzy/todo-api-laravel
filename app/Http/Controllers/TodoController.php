@@ -31,6 +31,18 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+        ]);
+        if ($validator->fails())
+        {
+            return response([
+                'errors'=>$validator->errors()->all(),
+                'status' => false,
+                'data' => null
+            ], 422);
+        } 
+
         $todo = $request->isMethod('put') ? 
         Todo::findOrFail($request->todo_id) : new Todo; 
 

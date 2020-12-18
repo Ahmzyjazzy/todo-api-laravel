@@ -27,10 +27,11 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
 Route::group(['middleware' => ['cors', 'json.response', 'auth:api']], function () { 
     // user routes with auth
     Route::post('/logout', 'UserController@logout')->name('logout.api');
+    Route::post('/user', 'UserController@logout')->name('logout.api');
 
     Route::post('todo', 'TodoController@store');
     Route::put('todo', 'TodoController@store');
     Route::delete('todo/{id}', 'TodoController@destroy');
-    Route::get('todos', 'TodoController@index');
     Route::get('todo/{id}', 'TodoController@show'); 
+    Route::get('todos', 'TodoController@index');
 });
