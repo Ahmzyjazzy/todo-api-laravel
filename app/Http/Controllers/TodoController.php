@@ -39,7 +39,6 @@ class TodoController extends Controller
         $todo->title            =   $request->input('title');
         $todo->description      =   $request->input('description');
         $todo->is_completed     =   0;   
-        $todo->expired_at       =   $request->input('expired_at');
         $todo->slug             =   Str::slug($request->input('title'), '_');
 
         if($todo->save()){

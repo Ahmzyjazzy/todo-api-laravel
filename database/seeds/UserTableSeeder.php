@@ -19,7 +19,7 @@ class UserTableSeeder extends Seeder
             $title  =   "Get a new role before Dec 2021";
             $slug   =   Str::slug($title, '_');
 
-            $user->todo()->save(factory(Todo::class)->make([
+            $user->todos()->save(factory(Todo::class)->make([
                 "title" => $title,
                 "description" => "Apply for role to develop my existing skills and improved more on it",
                 "slug" => $slug
