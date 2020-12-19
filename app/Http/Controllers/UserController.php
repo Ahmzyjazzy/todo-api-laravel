@@ -78,9 +78,10 @@ class UserController extends Controller
         return $this->respondWithToken(auth()->user(),$token);
     }
   
+    //get user
     public function getAuthUser(Request $request)
     {
-        return response()->json(auth()->user());
+        return new UserResource(auth()->user());
     }
     
     //logout
