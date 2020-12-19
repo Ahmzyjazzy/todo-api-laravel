@@ -117,9 +117,9 @@ class TodoController extends Controller
             }
         }
         
-        return (new TodoResource($todo))
-        ->response()
-        ->setStatusCode(403);
+        return response()->json([
+            'error' => 'Resource not found'
+        ], 401); 
     }
 
     /**
@@ -137,9 +137,9 @@ class TodoController extends Controller
             ->setStatusCode(200);
         }
 
-        return (new TodoResource($todo))
-        ->response()
-        ->setStatusCode(403);        
+        return response()->json([
+            'error' => 'Resource not found'
+        ], 401);        
     }
 
     /**
@@ -160,9 +160,9 @@ class TodoController extends Controller
             }
         }
 
-        return (new TodoResource($todo))
-        ->response()
-        ->setStatusCode(403); 
+        return response()->json([
+            'error' => 'Resource not found'
+        ], 401); 
     }
 
 }

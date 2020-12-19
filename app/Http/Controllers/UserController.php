@@ -14,12 +14,13 @@ use Tymon\JWTAuth\Facades\JWTFactory;
 
 class UserController extends Controller
 {
-    protected function respondWithToken($token)
+    protected function respondWithToken($user, $token)
     {
       return response()->json([
-        'access_token' => $token,
-        'token_type' => 'bearer',     
-        'expires_in' => auth('api')->factory()->getTTL() * 60
+        'data'          =>  $user,
+        'access_token'  =>  $token,
+        'token_type'    =>  'bearer',     
+        'expires_in'    =>  auth('api')->factory()->getTTL() * 60
       ]);
     }
 
@@ -49,7 +50,7 @@ class UserController extends Controller
         
         $token = JWTAuth::fromUser($user);
 
-        return $this->respondWithToken($token);
+        return $this->respondWithToken($user,$token);
     }
 
     public function login (Request $request) {
@@ -67,12 +68,14 @@ class UserController extends Controller
         
 
         if (!auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json([
+                'error' => 'Incorrect Credentials'
+            ], 401);
         }
 
         $token = JWTAuth::fromUser(auth()->user());
 
-        return $this->respondWithToken($token);
+        return $this->respondWithToken(auth()->user(),$token);
     }
   
     public function getAuthUser(Request $request)
