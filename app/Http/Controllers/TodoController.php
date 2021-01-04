@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;  
-use Illuminate\Support\Facades\Auth; 
+use App\Http\Resources\TodoResource;
+use App\Models\Todo;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use App\Models\Todo;
-use App\Http\Resources\Todo as TodoResource;
 
 class TodoController extends Controller
 {
@@ -20,8 +20,8 @@ class TodoController extends Controller
     {
         $todos = Todo::where('user_id', auth()->user()->id)->paginate(10);
         return (TodoResource::collection($todos))
-        ->response()
-        ->setStatusCode(200);;
+            ->response()
+            ->setStatusCode(200);
     }
 
     /**
@@ -35,32 +35,31 @@ class TodoController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
         ]);
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return response([
-                'errors'=>$validator->errors()->all(),
+                'errors' => $validator->errors()->all(),
                 'status' => false,
-                'data' => null
+                'data' => null,
             ], 422);
-        } 
+        }
 
-        $todo = new Todo; 
+        $todo = new Todo;
 
-        $todo->id               =   $request->input('todo_id');
-        $todo->user_id          =   $request->user()->id; //get user id from request  
-        $todo->title            =   $request->input('title');
-        $todo->description      =   $request->input('description');
-        $todo->is_completed     =   0;   
-        $todo->slug             =   Str::slug($request->input('title'), '_');
+        $todo->id = $request->input('todo_id');
+        $todo->user_id = $request->user()->id; //get user id from request
+        $todo->title = $request->input('title');
+        $todo->description = $request->input('description');
+        $todo->is_completed = 0;
+        $todo->slug = Str::slug($request->input('title'), '_');
 
-        if($todo->save()){
+        if ($todo->save()) {
             return (new TodoResource($todo))
-            ->response()
-            ->setStatusCode(201);
+                ->response()
+                ->setStatusCode(201);
         }
     }
 
-     /**
+    /**
      * Update a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -71,55 +70,53 @@ class TodoController extends Controller
         $validator = Validator::make($request->all(), [
             'todo_id' => 'required|int',
         ]);
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return response([
-                'errors'=>$validator->errors()->all(),
+                'errors' => $validator->errors()->all(),
                 'status' => false,
-                'data' => null
+                'data' => null,
             ], 422);
-        } 
+        }
 
         $todo = Todo::where('user_id', auth()->user()->id)
-                ->where('id', $request->input('todo_id'))->first();
-        
-        if($todo){
-            
-            $todo->id                   =   $request->input('todo_id');
-            $todo->user_id              =   $request->user()->id; //get user id from request 
+            ->where('id', $request->input('todo_id'))->first();
+
+        if ($todo) {
+
+            $todo->id = $request->input('todo_id');
+            $todo->user_id = $request->user()->id; //get user id from request
 
             if ($request->has('title')) {
-                $todo->title            =   $request->input('title');
-                $todo->slug             =   Str::slug($request->input('title'), '_');
+                $todo->title = $request->input('title');
+                $todo->slug = Str::slug($request->input('title'), '_');
             }
             if ($request->has('description')) {
-                $todo->description      =   $request->input('description');
+                $todo->description = $request->input('description');
             }
             if ($request->has('is_completed')) {
                 $validator = Validator::make($request->all(), [
                     'is_completed' => 'boolean',
                 ]);
-                if ($validator->fails())
-                {
+                if ($validator->fails()) {
                     return response([
-                        'errors'=>$validator->errors()->all(),
+                        'errors' => $validator->errors()->all(),
                         'status' => false,
-                        'data' => null
+                        'data' => null,
                     ], 422);
                 }
-                $todo->is_completed            =   $request->input('is_completed');
-            }  
-    
-            if($todo->save()){
+                $todo->is_completed = $request->input('is_completed');
+            }
+
+            if ($todo->save()) {
                 return (new TodoResource($todo))
-                ->response()
-                ->setStatusCode(200);
+                    ->response()
+                    ->setStatusCode(200);
             }
         }
-        
+
         return response()->json([
-            'error' => 'Resource not found'
-        ], 401); 
+            'error' => 'Resource not found',
+        ], 401);
     }
 
     /**
@@ -131,15 +128,15 @@ class TodoController extends Controller
     public function show($id)
     {
         $todo = Todo::where(['user_id' => auth()->user()->id, 'id' => $id])->first();
-        if($todo){
+        if ($todo) {
             return (new TodoResource($todo))
-            ->response()
-            ->setStatusCode(200);
+                ->response()
+                ->setStatusCode(200);
         }
 
         return response()->json([
-            'error' => 'Resource not found'
-        ], 401);        
+            'error' => 'Resource not found',
+        ], 401);
     }
 
     /**
@@ -152,17 +149,17 @@ class TodoController extends Controller
     {
         $todo = Todo::where(['user_id' => auth()->user()->id, 'id' => $id])->first();
 
-        if($todo){
-            if($todo->delete()){
+        if ($todo) {
+            if ($todo->delete()) {
                 return (new TodoResource($todo))
-                ->response()
-                ->setStatusCode(200);
+                    ->response()
+                    ->setStatusCode(200);
             }
         }
 
         return response()->json([
-            'error' => 'Resource not found'
-        ], 401); 
+            'error' => 'Resource not found',
+        ], 401);
     }
 
 }

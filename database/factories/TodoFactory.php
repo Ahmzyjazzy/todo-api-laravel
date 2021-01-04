@@ -14,6 +14,6 @@ $factory->define(Todo::class, function (Faker $faker) {
         'title' => $faker->title,
         'description' => $faker->text,
         'is_completed' => 0,
-        'slug' => $faker->slug
+        'slug' => $faker->slug,
     ];
 });
